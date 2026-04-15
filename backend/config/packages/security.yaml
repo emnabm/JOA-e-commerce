@@ -1,0 +1,41 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    providers:
+        users_in_database:
+            entity:
+                class: App\Entity\User
+                property: email
+        api_user_provider:
+            entity:
+                class: App\Entity\User
+                property: apiToken
+
+    firewalls:
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: api_user_provider
+            custom_authenticator: App\Security\APIAuthenticator
+
+
+#            jwt: ~
+#
+#            entry_point: jwt
+#
+            logout:
+                path: app_logout
+
+
+
+    access_control:
+        - { path: ^/api/register$, roles: PUBLIC_ACCESS }
+        - { path: ^/api/login$, roles: PUBLIC_ACCESS }
+        -  { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+
+
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
