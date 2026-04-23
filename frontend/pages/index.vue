@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
-    <Header/>
-    <img src="../public/Nourriture saine et fraîche.png" alt="Ecolive Slogan" style="width: 100%; height: auto;" />
+    <AppHeader/>
+    
     <h1 class="text-2xl font-bold mt-5 position-absolute  start-50 translate-middle">Categories</h1><br>
     <div class="cards " >
       <category-card

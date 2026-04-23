@@ -4,10 +4,8 @@ namespace App\Controller;
 
 
 use App\Entity\Items;
-use App\Entity\Panier;
 use App\Entity\Products;
 use App\Repository\CategoryRepository;
-use App\Repository\PanierRepository;
 use App\Repository\ProductsRepository;
 use App\Repository\ReviewRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -70,31 +68,6 @@ final class ProductsController extends AbstractController
             [],
             ['groups' => ['products:read', 'category:read']]
         );
-    }
-
-
-
-    #[Route('/setProduct_{id}', name: 'app_add_item', methods: ['post'])]
-    public function addProductItems(int $id,Request$request,ProductsRepository $productsRepository,PanierRepository $panierRepository):JsonResponse
-    {   $data = json_decode($request->getContent(), true);
-
-        if($this->getUser() == null){
-            return new JsonResponse(['error' => 'user undefined'], 401);
-        }
-
-        else{
-            $item=new Items();
-            $item->setProduct($productsRepository->find($id));
-            $item->setQuantity($data['quantity']);
-            $panier=$panierRepository->findOneBy(['user'=>$this->getUser()->getId(),'product'=>$id,'status'=>'pending']);
-            if($panier==null){
-                $panier=new Panier();
-                $panier->setUser($this->getUser());
-                $panier->getStatus('pending');
-            }
-            $item->setPanier($panier);
-        }
-        return $this->json(['message' => 'success'], 201);
     }
 
     #[Route('/products_{id}', name: 'app_products', methods: ['GET'])]

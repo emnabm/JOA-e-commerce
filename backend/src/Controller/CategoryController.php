@@ -18,6 +18,17 @@ final class CategoryController extends AbstractController
     {   $category = $categoryRepository->findAll();
         return $this->json($category, 200, [], ['groups' => 'category:read']);
     }
+    #[Route('/category/{id}', name: 'app_category_show', methods: ['GET'])]
+    public function get_category_by_id(int $id, CategoryRepository $categoryRepository): JsonResponse
+    {
+        $category = $categoryRepository->find($id);
+
+        if (!$category) {
+            return $this->json(['error' => 'Category not found'], 404);
+        }
+
+        return $this->json($category, 200, [], ['groups' => 'category:read']);
+    }
 
 
     #[Route('admin/categories', name: 'admin_categories_create', methods: ['POST'])]

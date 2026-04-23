@@ -11,7 +11,7 @@
     <p class="fs-4 warning font-bold">{{ name }}</p>
     <p>{{ description.length > 50 ? description.substring(0, 50) + '...' : description }}</p>
 
-    <p>Unit:{{unit}}</p>
+    <!-- <p>Unit:{{unit}}</p> -->
     <p>{{ prix }} DT</p>
 
     <!--  Bouton panier -->
@@ -45,7 +45,7 @@ defineProps({
 .background {
   text-align: center;
   position: relative;
-  height: 450px;
+  height: 250px;
   width: 250px;
   display: flex;
   flex-direction: column;

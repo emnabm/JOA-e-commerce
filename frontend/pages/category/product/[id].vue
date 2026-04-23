@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <AppHeader/>
 
     <div class="d-flex m-5 gap-5 me-4">
       <!-- Suggestion Sidebar -->
@@ -55,14 +55,14 @@
           <div class="border rounded p-3">
             <div class="d-flex justify-content-between align-items-center">
               <h2 class="mb-0">Reviews</h2>
-              <button @click="getReviews()" class="btn">{{ signe }}</button>
+              <button class="btn" @click="getReviews()" >{{ signe }}</button>
             </div>
 
             <div v-if="reviews">
               <Review ref="reviewComponent" :prod_id="id" />
 
               <div class="mt-4">
-                <form @submit.prevent="submitReview" class="border p-3 rounded">
+                <form class="border p-3 rounded" @submit.prevent="submitReview">
                   <!-- Rating Stars -->
                   <div class="mb-3">
                     <label class="form-label">Your rating *</label>
@@ -71,14 +71,15 @@
                           v-for="star in 5"
                           :key="star"
                           class="me-1"
-                          @click="reviewRating = star"
                           style="cursor: pointer; font-size: 1.5rem;"
+                          @click="reviewRating = star"
+                          
                       >
                         <img
                             src="/star.png"
                             :class="reviewRating >= star ? 'star-filled' : 'star-empty'"
                             style="width: 24px;"
-                        />
+                        >
                       </span>
                     </div>
                   </div>
@@ -119,10 +120,6 @@ import { useRoute } from '#vue-router'
 import axios from 'axios'
 import { Offcanvas } from 'bootstrap'
 
-import Header from '/components/Header.vue'
-import Review from '/components/Review.vue'
-import CartSidebar from '/components/CartSidebar.vue'
-import ProductSuggestions from '/components/ProductSuggestions.vue'
 
 
 const route = useRoute()
