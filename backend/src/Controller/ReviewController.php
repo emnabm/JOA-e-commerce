@@ -50,6 +50,12 @@ final class ReviewController extends AbstractController
 
         return new JsonResponse($result, Response::HTTP_OK);
     }
+    #[Route('/api/reviewCount/{id}', name: 'app_review_count', methods: ['GET'])]
+    public function countReviews(int $id, ReviewRepository $reviewRepository): JsonResponse
+    {
+        $count = $reviewRepository->getAverageRating($id);
+        return new JsonResponse(['count' => $count], Response::HTTP_OK);
+    }
 
 
     #[Route('/api/review', name: 'api_review', methods: ['POST'])]

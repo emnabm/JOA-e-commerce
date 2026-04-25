@@ -57,11 +57,13 @@ final class ProductsController extends AbstractController
             return $this->json(['error' => 'Product not found'], 404);
         }
 
-        $count = $reviewRepository->count(['product' => $id]);
+        $avg = $reviewRepository->getAverageRating($id);
+        $count = $reviewRepository->count(['product' => $product]);
 
         return $this->json(
             [
                 'product' => $product,
+                'avgRating' => $avg,
                 'reviewCount' => $count
             ],
             200,

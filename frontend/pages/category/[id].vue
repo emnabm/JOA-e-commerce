@@ -134,6 +134,7 @@
                 :stock="product.stock"
                 :unit="product.unit"
                 :view-mode="viewMode"
+                :rating="product.rating || 0"
               />
             </div>
 
@@ -244,6 +245,7 @@ const itemsPerPage = 11
 
 let minPriceGlobal = 0
 let maxPriceGlobal = 1000
+const rating = ref(0)
 
 const fetchCategory = async () => {
   try {
@@ -270,6 +272,15 @@ const fetchProducts = async () => {
     }
   } catch (err) {
     console.error('Error fetching products:', err)
+  }
+}
+const getReview =async() => {
+  try {
+    const response = await axios(`http://localhost:8000/api/reviewCount/${id}`);
+    rating.value = response.data.count;
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    return null;
   }
 }
 
@@ -408,6 +419,7 @@ watch([priceMin, priceMax], () => {
 onMounted(async () => {
   loading.value = true
   await Promise.all([
+    getReview(),
     fetchCategory(),
     fetchProducts(),
     fetchAllCategories()
