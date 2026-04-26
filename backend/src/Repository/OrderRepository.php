@@ -16,28 +16,30 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
-    //    /**
-    //     * @return Order[] Returns an array of Order objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Order
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    // Retourne les IDs de catégories achetées par l'utilisateur
+public function findPurchasedCategoryIdsByUser(User $user): array
+{
+    // Méthode plus simple et fiable
+    $conn = $this->getEntityManager()->getConnection();
+    
+    $sql = '
+        SELECT DISTINCT p.category_id 
+        FROM `order` o
+        INNER JOIN order_item oi ON oi.order_id = o.id
+        INNER JOIN products p ON p.id = oi.product_id
+        WHERE o.user_id = :userId
+        AND p.category_id IS NOT NULL
+    ';
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bindValue('userId', $user->getId());
+    $result = $stmt->executeQuery();
+    
+    $categoryIds = [];
+    while ($row = $result->fetchAssociative()) {
+        $categoryIds[] = (int)$row['category_id'];
+    }
+    
+    return $categoryIds;
+    }
 }

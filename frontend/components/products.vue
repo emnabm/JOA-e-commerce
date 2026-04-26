@@ -4,7 +4,11 @@
 
     <!-- Onglets filtre identiques -->
     <ul class="nav nav-tabs mb-3">
-      <li class="nav-item text-secondary" v-for="tab in tabs" :key="tab.key">
+      <li 
+        v-for="tab in tabs" 
+        :key="tab.key"
+        class="nav-item text-secondary" 
+        >
         <button
             class="nav-link"
             :class="{ active: activeTab === tab.key }"
@@ -22,7 +26,7 @@
           type="text"
           class="form-control"
           placeholder="Search"
-      />
+      >
     </div>
 
     <!-- Tableau -->
@@ -66,7 +70,7 @@
           <td>
             <button class="btn  me-2" @click="editProduct(product)">
               <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0,0,256,256" style="fill:#12B886;">
-                <g fill="#12b886" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(8,8)"><path d="M23.90625,3.96875c-1.04687,0 -2.09375,0.40625 -2.90625,1.21875l-15.8125,15.8125l-0.0625,0.3125l-1.09375,5.5l-0.3125,1.46875l1.46875,-0.3125l5.5,-1.09375l0.3125,-0.0625l15.8125,-15.8125c1.625,-1.625 1.625,-4.1875 0,-5.8125c-0.8125,-0.8125 -1.85937,-1.21875 -2.90625,-1.21875zM23.90625,5.875c0.50391,0 1.01172,0.23047 1.5,0.71875c0.97266,0.97266 0.97266,2.02734 0,3l-0.71875,0.6875l-2.96875,-2.96875l0.6875,-0.71875c0.48828,-0.48828 0.99609,-0.71875 1.5,-0.71875zM20.3125,8.71875l2.96875,2.96875l-12.09375,12.09375c-0.65625,-1.28125 -1.6875,-2.3125 -2.96875,-2.96875zM6.9375,22.4375c1.19922,0.48438 2.14063,1.42578 2.625,2.625l-3.28125,0.65625z"></path></g></g>
+                <g fill="#2C2117" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(8,8)"><path d="M23.90625,3.96875c-1.04687,0 -2.09375,0.40625 -2.90625,1.21875l-15.8125,15.8125l-0.0625,0.3125l-1.09375,5.5l-0.3125,1.46875l1.46875,-0.3125l5.5,-1.09375l0.3125,-0.0625l15.8125,-15.8125c1.625,-1.625 1.625,-4.1875 0,-5.8125c-0.8125,-0.8125 -1.85937,-1.21875 -2.90625,-1.21875zM23.90625,5.875c0.50391,0 1.01172,0.23047 1.5,0.71875c0.97266,0.97266 0.97266,2.02734 0,3l-0.71875,0.6875l-2.96875,-2.96875l0.6875,-0.71875c0.48828,-0.48828 0.99609,-0.71875 1.5,-0.71875zM20.3125,8.71875l2.96875,2.96875l-12.09375,12.09375c-0.65625,-1.28125 -1.6875,-2.3125 -2.96875,-2.96875zM6.9375,22.4375c1.19922,0.48438 2.14063,1.42578 2.625,2.625l-3.28125,0.65625z"></path></g></g>
               </svg>
             </button>
             <button class="btn " @click="deleteProduct(product.id)">
@@ -89,28 +93,28 @@
         <div class="row">
           <div class="col-md-6 mb-2">
             <label>Nom:</label>
-            <input v-model="nom" class="form-control" required />
+            <input v-model="nom" class="form-control" required >
           </div>
           <div class="col-md-6 mb-2">
             <label>Description:</label>
-            <input v-model="description" class="form-control" required />
+            <input v-model="description" class="form-control" required >
           </div>
           <div class="col-md-4 mb-2">
             <label>Prix:</label>
-            <input v-model="prix"  class="form-control" required />
+            <input v-model="prix"  class="form-control" required >
           </div>
           <div class="col-md-4 mb-2">
             <label>Stock:</label>
-            <input v-model="stock"  class="form-control" required />
+            <input v-model="stock"  class="form-control" required >
           </div>
           <div class="col-md-4 mb-2">
             <label>Unit:</label>
-            <input v-model="unit" class="form-control" required />
+            <input v-model="unit" class="form-control" required >
           </div>
 
           <div class="col-md-6 mb-2">
             <label>Image URL:</label>
-            <input v-model="image" class="form-control" required />
+            <input v-model="image" class="form-control" required >
           </div>
 
           <div class="col-md-6 mb-2">
@@ -136,7 +140,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup >
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 
@@ -151,18 +155,17 @@ const tabs = [
 const activeTab = ref('all')
 const searchTerm = ref('')
 
-const products = ref<any[]>([])
+const products = ref([])
 const categories=ref([])
-// ✅ Refs unitaires
 
-const id_prod = ref<number | null>(null)
+const id_prod = ref()
 const nom = ref('')
 const description = ref('')
 const prix = ref(0)
 const stock = ref(0)
 const unit = ref('')
-const image = ref('') // ➜ Nouveau champ
-const category = ref('') // ➜ Nouveau champ
+const image = ref('') 
+const category = ref('') 
 const editing = ref(false)
 
 const fetchCategories = async () => {
@@ -175,7 +178,7 @@ const fetchProducts = async () => {
   products.value = res.data
 }
 
-const setTab = (tab: string) => {
+const setTab = (tab) => {
   activeTab.value = tab
 }
 
@@ -196,7 +199,7 @@ const filteredProducts = computed(() => {
   })
 })
 
-const editProduct = (product: any) => {
+const editProduct = (product) => {
   id_prod.value = product.id
   nom.value = product.nom
   description.value = product.description
@@ -231,7 +234,7 @@ const saveProduct = async () => {
   fetchProducts()
 }
 
-const deleteProduct = async (id: number) => {
+const deleteProduct = async (id) => {
   await axios.delete(`http://localhost:8000/api/products/${id}`)
   fetchProducts()
 }
@@ -272,8 +275,8 @@ onMounted(()=>
 }
 
 .nav-tabs .nav-link.active {
-  color: #198754;
-  border-color: #198754 #198754 #fff;
+  color: #2C2117;
+  border-color: #2C2117 #2C2117 #fff;
 }
 
 .table thead {
@@ -281,7 +284,7 @@ onMounted(()=>
 }
 
 .text-success {
-  color: #198754 !important;
+  color: #2C2117 !important;
 }
 
 .text-danger {

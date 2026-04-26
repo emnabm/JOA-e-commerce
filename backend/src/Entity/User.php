@@ -67,6 +67,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Items::class, mappedBy: 'user')]
     private Collection $items;
 
+    /**
+     * @var Collection<int, ProductView>
+     */
+    #[ORM\OneToMany(targetEntity: ProductView::class, mappedBy: 'user')]
+    private Collection $productViews;
+
 
 
 
@@ -76,6 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->reviews = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->items = new ArrayCollection();
+        $this->productViews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -303,6 +310,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($item->getUser() === $this) {
                 $item->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductView>
+     */
+    public function getProductViews(): Collection
+    {
+        return $this->productViews;
+    }
+
+    public function addProductView(ProductView $productView): static
+    {
+        if (!$this->productViews->contains($productView)) {
+            $this->productViews->add($productView);
+            $productView->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductView(ProductView $productView): static
+    {
+        if ($this->productViews->removeElement($productView)) {
+            // set the owning side to null (unless already changed)
+            if ($productView->getUser() === $this) {
+                $productView->setUser(null);
             }
         }
 

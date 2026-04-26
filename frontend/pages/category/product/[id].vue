@@ -189,25 +189,7 @@
       </section>
 
       <!-- Produits similaires -->
-      <section v-if="related.length > 0" class="related-section">
-        <div class="section-label">Vous aimerez aussi</div>
-        <h2 class="section-title">Produits similaires</h2>
-        <div class="related-grid">
-          <Product-card
-            v-for="p in related"
-            :id="p.id"
-            :key="p.id"
-            :name="p.nom"
-            :img="p.image"
-            :description="p.description"
-            :prix="p.prix"
-            :stock="p.stock"
-            :unit="p.unit"
-            :rating="p.avgRating ?? 0"
-            :review-count="p.review_count ?? 0"
-          />
-        </div>
-      </section>
+      <RecommandationSection :current-product-id="product.product.id" />
 
     </main>
 
@@ -224,10 +206,13 @@
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useBrowsingHistory } from '@/composables/useBrowsingHistory'
+
+const { addToHistory } = useBrowsingHistory()
+
 
 const route   = useRoute()
 const id      = route.params.id
-
 const product  = ref(null)
 const loading  = ref(false)
 const activeImg = ref('')
@@ -341,6 +326,7 @@ const submitReview = async () => {
 onMounted(async () => {
   user.value = localStorage.getItem('user_username')
   await fetchProduct()
+  addToHistory(parseInt(id))   // tracker la visite
   await fetchReviews()
   await fetchRelated()
   

@@ -65,6 +65,12 @@ class Products
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'product')]
     private Collection $orderItems;
 
+    /**
+     * @var Collection<int, ProductView>
+     */
+    #[ORM\OneToMany(targetEntity: ProductView::class, mappedBy: 'product')]
+    private Collection $productViews;
+
 
 
 
@@ -74,6 +80,7 @@ class Products
         $this->items = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->orderItems = new ArrayCollection();
+        $this->productViews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -243,6 +250,72 @@ class Products
             // set the owning side to null (unless already changed)
             if ($orderItem->getProduct() === $this) {
                 $orderItem->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+    /**
+     * Calcule la note moyenne des avis
+     */
+    public function getAvgRating(): float
+    {
+        if ($this->reviews->isEmpty()) {
+            return 0;
+        }
+        
+        $total = 0;
+        foreach ($this->reviews as $review) {
+            $total += $review->getRating();
+        }
+        
+        return round($total / $this->reviews->count(), 1);
+    }
+
+    /**
+     * Nombre d'avis
+     */
+    public function getReviewCount(): int
+    {
+        return $this->reviews->count();
+    }
+
+    /**
+     * Nombre de ventes (via OrderItem)
+     */
+    public function getSalesCount(): int
+    {
+        $total = 0;
+        foreach ($this->orderItems as $item) {
+            $total += $item->getQuantity();
+        }
+        return $total;
+    }
+
+    /**
+     * @return Collection<int, ProductView>
+     */
+    public function getProductViews(): Collection
+    {
+        return $this->productViews;
+    }
+
+    public function addProductView(ProductView $productView): static
+    {
+        if (!$this->productViews->contains($productView)) {
+            $this->productViews->add($productView);
+            $productView->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductView(ProductView $productView): static
+    {
+        if ($this->productViews->removeElement($productView)) {
+            // set the owning side to null (unless already changed)
+            if ($productView->getProduct() === $this) {
+                $productView->setProduct(null);
             }
         }
 

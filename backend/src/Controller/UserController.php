@@ -5,6 +5,9 @@ namespace App\Controller;
 
 use App\Entity\Products;
 use App\Entity\Review;
+use App\Entity\User;
+use App\Repository\UserRepository;
+use App\Repository\ReviewRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -125,6 +128,24 @@ final class UserController extends AbstractController
 
         return new JsonResponse(['message' => 'Password changed successfully']);
     }
+    #[Route('admin/users', name:'api_get_users', methods:['GET'])]
+    public function getUsers(EntityManagerInterface $entityManager, UserRepository $userRepository): JsonResponse
+    {
+        $users = $userRepository->findAll();
+        $userData = array_map(function($user) {
+            return [
+                'id' => $user->getId(),
+                'username' => $user->getUsername(),
+                'email' => $user->getUserIdentifier(),
+                'roles' => $user->getRoles(),
+                'phone' => $user->getPhone(),
+                'address' => $user->getAdress(),
+            ];
+        }, $users);
+        return new JsonResponse($userData);
+    }
+
+    
 
 
 

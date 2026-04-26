@@ -4,7 +4,7 @@
 
     <!-- Onglets filtre -->
     <ul class="nav nav-tabs mb-3">
-      <li class="nav-item" v-for="tab in tabs" :key="tab.key">
+      <li v-for="tab in tabs" :key="tab.key" class="nav-item">
         <button
             class="nav-link"
             :class="{ active: activeTab === tab.key }"
@@ -18,10 +18,10 @@
     <!-- Filtres date -->
     <div class="d-flex gap-3 mb-3 flex-wrap">
       <div class="flex-fill">
-        <input type="date" v-model="fromDate" class="form-control" />
+        <input v-model="fromDate" type="date" class="form-control" />
       </div>
       <div class="flex-fill">
-        <input type="date" v-model="toDate" class="form-control" />
+        <input v-model="toDate" type="date" class="form-control" />
       </div>
     </div>
 
@@ -65,9 +65,11 @@
 
             </div>
 
-            <div :class="{ 'disabled-icon': order.status === 'cancelled' }"
-                 @click="order.status !== 'cancelled' && verifOrder(order.id)"
-            :title="verif">
+            <div 
+              :title="verif"
+              :class="{ 'disabled-icon': order.status === 'cancelled' }"
+              @click="order.status !== 'cancelled' && verifOrder(order.id)"
+            >
 
               <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0,0,256,256"
                    style="fill:#12B886;">
@@ -87,7 +89,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup >
 import { ref, computed, onMounted } from 'vue'
 import axios from "axios"
 
@@ -119,7 +121,7 @@ const fetchOrders = async () => {
   }
 }
 
-const setTab = (tab: string) => {
+const setTab = (tab) => {
   activeTab.value = tab
 }
 
@@ -143,7 +145,7 @@ const cancelOrder=async (id)=>{
     cancel.value = response.data
     fetchOrders()
   } catch (e) {
-    alert("Erreur de blocage de la commande!")
+    alert("Erreur de blocage de la commande!",e)
   } finally {
     loading.value = false
   }
@@ -156,7 +158,7 @@ const verifOrder=async (id)=>{
     cancel.value = response.data
     fetchOrders()
   } catch (e) {
-    alert("Erreur de blocage de la commande!")
+    alert("Erreur de blocage de la commande!",e)
   } finally {
     loading.value = false
   }
@@ -167,7 +169,7 @@ onMounted(fetchOrders)
 
 <style scoped>
 .card {
-  border: 1px solid #e48b08;
+  border: 1px solid #C8854A;
   max-width: 100%;
 }
 
@@ -181,7 +183,7 @@ onMounted(fetchOrders)
 }
 
 .table th {
-  color: #198754;
+  color: #C8854A;
   font-weight: 600;
 }
 
@@ -202,8 +204,8 @@ onMounted(fetchOrders)
   color: #e48b08 !important;
 }
 .disabled-icon {
-  opacity: 0.4;     /* rend l'icône plus pâle */
-  pointer-events: none; /* désactive le clic */
-  cursor: not-allowed;  /* curseur interdit */
+  opacity: 0.4;     
+  pointer-events: none; 
+  cursor: not-allowed;  
 }
 </style>

@@ -34,6 +34,9 @@ security:
         - { path: ^/api/login$, roles: PUBLIC_ACCESS }
         -  { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/api/recommendations/purchases, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/recommendations/history, roles: PUBLIC_ACCESS }
+        - { path: ^/api/recommendations/trending, roles: PUBLIC_ACCESS }
 
 
 

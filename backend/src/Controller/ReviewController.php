@@ -100,4 +100,28 @@ final class ReviewController extends AbstractController
         $topProductRate=$reviewRepository->findTopRatedProducts(4);
         return new JsonResponse($topProductRate, Response::HTTP_OK);
     }
+    #[Route('admin/reviews', name:'api_get_reviews', methods:['GET'])]
+    public function getReviews(ReviewRepository $reviewRepository): JsonResponse
+    {
+        $reviews = $reviewRepository->findAll();
+        $reviewData = array_map(function($review) {
+            return [
+                'id' => $review->getId(),
+                'text' => $review->getText(),
+                'date' => $review->getDate()?->format('Y-m-d'),
+                'rating' => $review->getRating(),
+
+                'user' => [
+                    'id' => $review->getUser()->getId(),
+                    'username' => $review->getUser()->getUsername(),
+                ],
+                'product' => [
+                    'id' => $review->getProduct()->getId(),
+                    'name' => $review->getProduct()->getNom(),
+                ],
+
+            ];
+        }, $reviews);
+        return new JsonResponse($reviewData);
+    }
 }
