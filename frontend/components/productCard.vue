@@ -4,7 +4,7 @@
     <!-- Image -->
     <div class="prod-image">
       <span v-if="stock === 0" class="badge-stock">Rupture de stock</span>
-      <img :src="`/${img}`" :alt="name" class="prod-img" />
+      <img :src="imageUrl" :alt="name" class="prod-img" />
       <div class="prod-overlay">
         <NuxtLink :to="`/category/product/${id}`" class="overlay-btn">
           View Details
@@ -51,16 +51,25 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   id:          { type: Number, required: true },
   name:        { type: String, required: true },
   img:         { type: String, default: '' },
+  image:       { type: String, default: '' },
   description: { type: String, default: '' },
   prix:        { type: Number, required: true },
   stock:       { type: Number, default: 1 },
   unit:        { type: String, default: '' },
   rating:      { type: Number, default: 0 },
   reviewCount: { type: Number, default: 0 },
+})
+
+// Handle both 'img' (from backend) and 'image' field names
+const imageUrl = computed(() => {
+  const imgPath = props.img || props.image || ''
+  return imgPath ? `/${imgPath}` : '/makeup.jpeg'
 })
 </script>
 

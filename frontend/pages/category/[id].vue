@@ -128,7 +128,7 @@
                 :id="product.id"
                 :key="product.id"
                 :name="product.nom"
-                :img="product.img"
+                :image="product.image"
                 :description="product.description"
                 :prix="product.prix"
                 :stock="product.stock"

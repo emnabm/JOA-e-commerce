@@ -41,10 +41,10 @@
         <div class="prod-grid">
           <product-card
             v-for="product in topRate"
-            :id="product.id"
             :key="product.id"
+            :id="product.id"
             :name="product.nom"
-            :img="product.img"
+            :image="product.image"
             :description="product.description"
             :prix="product.prix"
             :stock="product.stock"
