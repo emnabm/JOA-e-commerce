@@ -23,7 +23,6 @@
         <thead>
           <tr>
             <th>Order ID</th>
-            <th>Customer</th>
             <th>Date</th>
             <th>Total</th>
             <th>Status</th>
@@ -33,7 +32,6 @@
         <tbody>
           <tr v-for="order in paginatedOrders" :key="order.id">
             <td>#{{ order.id }}</td>
-            <td>{{ order.user?.username || 'N/A' }}</td>
             <td>{{ formatDate(order.date) }}</td>
             <td>{{ order.total }} DT</td>
             <td>

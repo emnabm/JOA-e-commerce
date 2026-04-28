@@ -49,7 +49,7 @@
         </div>
         <div class="category-info">
           <h3>{{ category.name }}</h3>
-          <p>{{ category.products?.length || 0 }} products</p>
+          <p>{{ getProductCount(category.id) }} products</p>
         </div>
       </div>
     </div>
@@ -94,6 +94,7 @@ import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 
 const categories = ref([])
+const products = ref([])
 const loading = ref(true)
 const searchTerm = ref('')
 const currentPage = ref(1)
@@ -117,6 +118,15 @@ const fetchCategories = async () => {
   }
 }
 
+const fetchProducts = async () => {
+  try {
+    const response = await axios.get('http://localhost:8000/admin/products')
+    products.value = response.data
+  } catch (error) {
+    console.error('Error fetching products for category counts:', error)
+  }
+}
+
 const getImageUrl = (image) => {
   if (!image) return '/default-category.jpg'
   if (image.startsWith('http')) return image
@@ -133,6 +143,17 @@ const filteredCategories = computed(() => {
   
   return filtered
 })
+
+const productCountsByCategory = computed(() => {
+  return products.value.reduce((acc, product) => {
+    const categoryId = product?.category?.id
+    if (!categoryId) return acc
+    acc[categoryId] = (acc[categoryId] || 0) + 1
+    return acc
+  }, {})
+})
+
+const getProductCount = (categoryId) => productCountsByCategory.value[categoryId] || 0
 
 const paginatedCategories = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage
@@ -169,7 +190,7 @@ const saveCategory = async () => {
     } else {
       await axios.post('http://localhost:8000/admin/categories', form.value)
     }
-    await fetchCategories()
+    await Promise.all([fetchCategories(), fetchProducts()])
     closeModal()
   } catch (error) {
     alert('Error saving category: ' + (error.response?.data?.message || error.message))
@@ -180,14 +201,16 @@ const deleteCategory = async (id) => {
   if (confirm('Are you sure you want to delete this category? Products in this category will be affected.')) {
     try {
       await axios.delete(`http://localhost:8000/admin/categories/${id}`)
-      await fetchCategories()
+      await Promise.all([fetchCategories(), fetchProducts()])
     } catch (error) {
       alert('Error deleting category',error)
     }
   }
 }
 
-onMounted(fetchCategories)
+onMounted(async () => {
+  await Promise.all([fetchCategories(), fetchProducts()])
+})
 </script>
 
 <style scoped>

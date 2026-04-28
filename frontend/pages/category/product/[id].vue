@@ -179,7 +179,7 @@
             class="review-textarea"
             rows="4"
           ></textarea>
-          <button class="btn-cart" :disabled="!newReview.rating" @click="submitReview" >
+          <button class="btn-cart"  @click="submitReview" >
             Publish my review
           </button>
         </div>

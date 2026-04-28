@@ -198,7 +198,7 @@
             class="related-card"
           >
             <div class="related-icon">
-              <img v-if="cat.img" :src="cat.img" :alt="cat.name" >
+              <img v-if="cat.img" :src="`/${cat.img}`" :alt="cat.name" >
               <svg v-else width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C8854A" stroke-width="1.4">
                 <rect x="2" y="3" width="20" height="14" rx="2"/>
                 <path d="M8 21h8M12 17v4"/>
@@ -784,6 +784,13 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.related-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .related-card h3 {

@@ -29,7 +29,7 @@
             <div v-if="items.length > 0" class="summary-items">
               <div v-for="item in items" :key="item.id" class="summary-item">
                 <div class="item-image">
-                  <img :src="item.product.image || '/default-product.jpg'" :alt="item.product.nom">
+                  <img :src="getProductImage(item)" :alt="item.product.nom">
                 </div>
                 <div class="item-details">
                   <h4>{{ item.product.nom }}</h4>
@@ -259,6 +259,18 @@ const formatPrice = (price) => {
     minimumFractionDigits: 3,
     maximumFractionDigits: 3
   }).format(price)
+}
+
+const getProductImage = (item) => {
+  const imagePath = item?.product?.image
+  if (!imagePath) return '/default-product.jpg'
+
+  // Handle both relative backend paths and absolute URLs.
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath
+  }
+
+  return imagePath.startsWith('/') ? imagePath : `/${imagePath}`
 }
 
 const goToPayment = () => {
